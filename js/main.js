@@ -36,6 +36,8 @@ const newBook = () => {
   const book = new Library(title, author, pages, read);
 
   myBooks.push(book);
+
+  localStorage.setItem("book", JSON.stringify(myBooks));
 };
 
 /* Template to create book card with the data */
@@ -120,6 +122,19 @@ booksLibrary.forEach((book) => {
     deleteBook(e);
   });
 });
+
+/* Load books from localstorage and render */
+const loadStorage = () => {
+  let bookStorage = JSON.parse(localStorage.getItem("book"));
+
+  if (bookStorage) {
+    bookStorage.forEach((book) => {
+      bookTemplate(book);
+    });
+  }
+};
+
+document.querySelector("DOMContentLoaded", loadStorage());
 
 /* Open form element */
 createBookElement.addEventListener("click", () => {

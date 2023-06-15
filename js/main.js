@@ -41,9 +41,9 @@ const newBook = () => {
 };
 
 /* Template to create book card with the data */
-const bookTemplate = (book) => {
+const bookTemplate = (book, index) => {
   const card = `
-    <div class="book__card" id="card">
+    <div class="book__card card-${index}">
             <div class="book__header">
               <h3 class="book__title">${book.title}</h3>
               <p class="book__author"> by ${book.author},</p>
@@ -91,8 +91,8 @@ const renderBook = () => {
   }
 
   /* Loop through myBooks, and append card to the DOM */
-  myBooks.forEach((book) => {
-    bookTemplate(book);
+  myBooks.forEach((book, index) => {
+    bookTemplate(book, index);
   });
 };
 
@@ -106,12 +106,17 @@ const deleteBook = (e) => {
 /* Change read status per book */
 const readStatus = (e) => {
   if (e.target.classList.contains("changeStatus")) {
-    let bookState = e.target.parentElement.previousElementSibling.children[1];
+    let bookRead =
+      e.target.parentElement.previousElementSibling.lastElementChild;
+    let parentElement = e.target.parentElement.parentElement;
 
-    if (bookState.textContent === "reading") {
-      return (bookState.textContent = "complete");
+    if (bookRead.textContent === "reading") {
+      bookRead.textContent = "complete";
+      updateLocalstorage(bookRead, parentElement);
+    } else {
+      bookRead.textContent = "reading";
+      updateLocalstorage(bookRead, parentElement);
     }
-    bookState.textContent = "reading";
   }
 };
 
@@ -128,8 +133,8 @@ const loadStorage = () => {
   let bookStorage = JSON.parse(localStorage.getItem("book"));
 
   if (bookStorage) {
-    bookStorage.forEach((book) => {
-      bookTemplate(book);
+    bookStorage.forEach((book, index) => {
+      bookTemplate(book, index);
     });
   }
 };
@@ -142,3 +147,18 @@ createBookElement.addEventListener("click", () => {
 
   createBookElement.style.display = "none";
 });
+
+const updateLocalstorage = (bookRead, parentElement) => {
+  let bookStorage = JSON.parse(localStorage.getItem("book"));
+  /* From parentElement class, get the number of the card id */
+  let bookIndex = Number(parentElement.className.split("-").slice(1));
+
+  bookStorage.forEach((book, index) => {
+    if (index === bookIndex) {
+      /* Replace the read value from localstorage, with the new value from the card */
+      bookStorage[index].read = bookRead.textContent;
+    }
+
+    localStorage.setItem("book", JSON.stringify(bookStorage));
+  });
+};

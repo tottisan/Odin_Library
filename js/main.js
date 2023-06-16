@@ -98,8 +98,11 @@ const renderBook = () => {
 
 /* Delete a book */
 const deleteBook = (e) => {
+  let parentElement = e.target.parentElement.parentElement;
+
   if (e.target.classList.contains("delete")) {
     e.target.parentElement.parentElement.remove();
+    deleteLocalstorage(parentElement);
   }
 };
 
@@ -157,6 +160,20 @@ const updateLocalstorage = (bookRead, parentElement) => {
     if (index === bookIndex) {
       /* Replace the read value from localstorage, with the new value from the card */
       bookStorage[index].read = bookRead.textContent;
+    }
+
+    localStorage.setItem("book", JSON.stringify(bookStorage));
+  });
+};
+
+const deleteLocalstorage = (parentElement) => {
+  let bookStorage = JSON.parse(localStorage.getItem("book"));
+  let bookIndex = Number(parentElement.className.split("-").slice(1));
+
+  bookStorage.forEach((book, index) => {
+    if (index === bookIndex) {
+      /* Delete a book from localstorage */
+      bookStorage.splice(index, 1);
     }
 
     localStorage.setItem("book", JSON.stringify(bookStorage));

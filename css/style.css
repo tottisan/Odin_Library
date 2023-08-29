@@ -154,7 +154,6 @@ svg {
   }
 
   .book__card {
-    flex-direction: column;
     padding: 0.7rem;
   }
 

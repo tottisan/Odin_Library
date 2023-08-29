@@ -137,6 +137,8 @@ const loadStorage = () => {
 
   if (bookStorage) {
     bookStorage.forEach((book, index) => {
+      myBooks = [...myBooks, book];
+      
       bookTemplate(book, index);
     });
   }
@@ -174,6 +176,8 @@ const deleteLocalstorage = (parentElement) => {
     if (index === bookIndex) {
       /* Delete a book from localstorage */
       bookStorage.splice(index, 1);
+
+      myBooks = [...bookStorage];
     }
 
     localStorage.setItem("book", JSON.stringify(bookStorage));

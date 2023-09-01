@@ -138,7 +138,7 @@ svg {
   height: 100%;
 }
 
-@media (min-width: 475px) {
+@media (min-width: 350px) {
   article {
     display: flex;
     flex-direction: column-reverse;
